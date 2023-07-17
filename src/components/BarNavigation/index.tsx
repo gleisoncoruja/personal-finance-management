@@ -1,28 +1,14 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import Drawer from "@mui/material/Drawer";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
-import { styled } from "@mui/material/styles";
-import SpeedDial, { SpeedDialProps } from "@mui/material/SpeedDial";
+
 import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import PrintIcon from "@mui/icons-material/Print";
 import ShareIcon from "@mui/icons-material/Share";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-  position: "absolute",
-
-  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-    top: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-}));
+import { StyledSpeedDial } from "./style";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const actions = [
   { icon: <FileCopyIcon />, name: "Copy" },
@@ -41,7 +27,7 @@ export const BarNavigation = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             hidden={hidden}
-            icon={<SpeedDialIcon />}
+            icon={<MenuIcon />}
             direction={"down"}
           >
             {actions.map((action) => (
