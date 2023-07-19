@@ -8,7 +8,11 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 export const menuActions = [
   { icon: <AttachMoneyIcon />, name: "Receitas", path: "/income" },
   { icon: <MoneyOffIcon />, name: "Despesas", path: "/expense" },
-  { icon: <AddCardIcon />, name: "Categorias de receitas", path: "/" },
+  {
+    icon: <AddCardIcon />,
+    name: "Categorias de receitas",
+    path: "/income/category",
+  },
   { icon: <CreditCardOffIcon />, name: "Categorias de despesas", path: "/" },
   { icon: <SavingsIcon />, name: "Meta financeira", path: "/" },
   { icon: <AssessmentIcon />, name: "Relatório", path: "/" },

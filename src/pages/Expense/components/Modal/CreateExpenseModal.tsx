@@ -53,7 +53,7 @@ export const CreateExpenseModal = ({
       expenseServices.postExpense(newExpense);
     } catch (error: Error | unknown) {
       const errorMessage =
-        error instanceof Error ? error?.message : "Erro ao salvar receita";
+        error instanceof Error ? error?.message : "Erro ao salvar despesa";
       toast.error(errorMessage);
       return;
     }
@@ -69,7 +69,7 @@ export const CreateExpenseModal = ({
   }, [open]);
 
   return (
-    <CustomModal handleClose={handleClose} open={open} title="Nova receita">
+    <CustomModal handleClose={handleClose} open={open} title="Nova despesa">
       <DatePicker onChange={handleSelectDate} />
       <NumericFormat
         value={value}

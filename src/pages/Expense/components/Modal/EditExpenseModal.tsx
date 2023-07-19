@@ -60,7 +60,7 @@ export const EditExpenseModal = ({
       });
     } catch (error: Error | unknown) {
       const errorMessage =
-        error instanceof Error ? error?.message : "Erro ao salvar receita";
+        error instanceof Error ? error?.message : "Erro ao salvar despesa";
       toast.error(errorMessage);
       return;
     }
@@ -84,7 +84,7 @@ export const EditExpenseModal = ({
   }, [open, expenseData]);
 
   return (
-    <CustomModal handleClose={handleClose} open={open} title="Nova receita">
+    <CustomModal handleClose={handleClose} open={open} title="Editar despesa">
       <DatePicker
         onChange={handleSelectDate}
         value={parse(selectedDate, "dd/MM/yyyy", new Date())}

@@ -2,7 +2,7 @@ import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { StyledSpeedDial } from "./style";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { menuActions } from "./menuIcons";
 
 export const BarNavigation = () => {
@@ -35,7 +35,7 @@ export const BarNavigation = () => {
             component="div"
             sx={{ flexGrow: 1, textAlign: "center" }}
           >
-            Gerenciar finanças
+            <Link to={"/"}>Gerenciar finanças</Link>
           </Typography>
         </Toolbar>
       </AppBar>

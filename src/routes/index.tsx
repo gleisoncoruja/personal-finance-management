@@ -3,6 +3,7 @@ import { Home } from "../pages/Home";
 import { MainLayout } from "../layout";
 import { Income } from "../pages/Income";
 import { Expense } from "../pages/Expense";
+import { CategoryIncome } from "../pages/CategoryIncome";
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +12,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/income", element: <Income /> },
+      { path: "/income/category", element: <CategoryIncome /> },
       { path: "/expense", element: <Expense /> },
     ],
   },

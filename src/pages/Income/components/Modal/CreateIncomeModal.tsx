@@ -8,6 +8,7 @@ import { incomeServices } from "../../../../services/incomeServices";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { CustomModal } from "../../../../components/Modal";
+import { categoryIncomeServices } from "../../../../services/categoryIncomeServices";
 
 interface ICreateIncomeProps {
   open: boolean;
@@ -24,7 +25,7 @@ export const CreateIncomeModal = ({
   const [observation, setObservation] = useState<string | null>("");
   const [repeat, setRepeat] = useState(false);
 
-  const categories = incomeServices.getCategories();
+  const categories = categoryIncomeServices.getCategoryIncomes();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;

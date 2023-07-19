@@ -160,7 +160,6 @@ const patchIncome = ({ id, data }: IPatchIncomeProps) => {
 };
 
 export const incomeServices = {
-  getCategories,
   getIncomes,
   postIncome,
   deleteIncome,

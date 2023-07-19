@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { CustomModal } from "../../../../components/Modal";
 import { IIncome } from "../../../../interfaces/income";
 import { parse } from "date-fns";
+import { categoryIncomeServices } from "../../../../services/categoryIncomeServices";
 
 interface IEditIncomeModalProps {
   open: boolean;
@@ -28,7 +29,7 @@ export const EditIncomeModal = ({
   const [observation, setObservation] = useState<string | null | undefined>("");
   const [repeat, setRepeat] = useState(false);
 
-  const categories = incomeServices.getCategories();
+  const categories = categoryIncomeServices.getCategoryIncomes();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -84,7 +85,7 @@ export const EditIncomeModal = ({
   }, [open, incomeData]);
 
   return (
-    <CustomModal handleClose={handleClose} open={open} title="Nova receita">
+    <CustomModal handleClose={handleClose} open={open} title="Editar receita">
       <DatePicker
         onChange={handleSelectDate}
         value={parse(selectedDate, "dd/MM/yyyy", new Date())}
