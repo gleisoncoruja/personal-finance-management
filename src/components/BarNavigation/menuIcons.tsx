@@ -13,7 +13,11 @@ export const menuActions = [
     name: "Categorias de receitas",
     path: "/income/category",
   },
-  { icon: <CreditCardOffIcon />, name: "Categorias de despesas", path: "/" },
+  {
+    icon: <CreditCardOffIcon />,
+    name: "Categorias de despesas",
+    path: "/expense/category",
+  },
   { icon: <SavingsIcon />, name: "Meta financeira", path: "/" },
   { icon: <AssessmentIcon />, name: "Relatório", path: "/" },
 ];
