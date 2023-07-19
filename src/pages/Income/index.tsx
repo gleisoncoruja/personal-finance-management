@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { incomeServices } from "../../services/incomeServices";
 import { IIncome } from "../../interfaces/income";
 import { EditIncomeModal } from "./components/Modal/EditIncomeModal";
+import { IMonths } from "../../interfaces/months";
+import { getMonth, parse } from "date-fns";
 
 const StyledFab = styled(Fab)({
   position: "relative",
@@ -24,6 +26,7 @@ export const Income = () => {
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [incomes, setIncomes] = useState<IIncome[] | []>([]);
   const [detailIncome, setDetailIncome] = useState<IIncome>();
+  const [selectedMonth, setSelectedMonth] = useState<IMonths | null>(null);
 
   const getIncomes = () => {
     const data = incomeServices.getIncomes();
@@ -53,13 +56,27 @@ export const Income = () => {
     setOpenEditModal(false);
   };
 
+  const handleFilter = (value: IMonths | null) => {
+    const incomes = incomeServices.getIncomes();
+    const incomesFiltered = incomes.filter((income: IIncome) => {
+      const dateIncome =
+        income.date && parse(income.date, "dd/MM/yyyy", new Date());
+      const month = dateIncome && getMonth(dateIncome);
+
+      return month === value?.id ?? 0;
+    });
+    setSelectedMonth(value);
+
+    setIncomes(value?.name ? incomesFiltered : incomes);
+  };
+
   useEffect(() => {
     getIncomes();
   }, [openEditModal, openCreateModal]);
   return (
     <IncomeContainer>
       <AutoCompleteContent>
-        <AutoCompleteMonths />
+        <AutoCompleteMonths handleChange={handleFilter} value={selectedMonth} />
       </AutoCompleteContent>
       <IncomeExpensesTable
         incomeData={incomes}
