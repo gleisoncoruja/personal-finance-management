@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { MainLayout } from "../layout";
 import { Income } from "../pages/Income";
+import { Expense } from "../pages/Expense";
 
 export const router = createBrowserRouter([
   {
@@ -10,6 +11,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/income", element: <Income /> },
+      { path: "/expense", element: <Expense /> },
     ],
   },
 ]);

@@ -12,17 +12,18 @@ import { StyledTableContainer } from "./style";
 import { IIncome } from "../../interfaces/income";
 import { ConfirmDeleteModal } from "../Modal/ConfirmDeleteModal";
 import { useState } from "react";
+import { IExpense } from "../../interfaces/expenses";
 
-interface IIncomeProps {
-  incomeData: IIncome[] | [];
+interface IncomeExpensesTableProps {
+  tableData: IIncome[] | IExpense[] | [];
   handleDelete: (id: number) => void;
   handleOpenEditModal: (id: number) => void;
 }
 export const IncomeExpensesTable = ({
-  incomeData,
+  tableData,
   handleDelete,
   handleOpenEditModal,
-}: IIncomeProps) => {
+}: IncomeExpensesTableProps) => {
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [id, setId] = useState(0);
 
@@ -48,7 +49,7 @@ export const IncomeExpensesTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {incomeData?.map((income) => (
+          {tableData?.map((income) => (
             <TableRow key={income.id}>
               <TableCell>{income.date}</TableCell>
               <TableCell>{income.value}</TableCell>

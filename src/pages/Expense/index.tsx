@@ -1,36 +1,36 @@
 import {
   AddButtonContent,
   AutoCompleteContent,
-  IncomeContainer,
+  ExpenseContainer,
 } from "./style";
 import { IncomeExpensesTable } from "../../components/Tables/IncomeExpensesTable";
 import { AutoCompleteMonths } from "../../components/AutoComplete/Months";
 import { styled } from "@mui/material/styles";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { CreateIncomeModal } from "./components/Modal/CreateIncomeModal";
+import { CreateExpenseModal } from "./components/Modal/CreateExpenseModal";
 import { useEffect, useState } from "react";
-import { incomeServices } from "../../services/incomeServices";
-import { IIncome } from "../../interfaces/income";
-import { EditIncomeModal } from "./components/Modal/EditIncomeModal";
+import { expenseServices } from "../../services/expenseServices";
+import { EditExpenseModal } from "./components/Modal/EditExpenseModal";
 import { IMonths } from "../../interfaces/months";
 import { getMonth, parse } from "date-fns";
+import { IExpense } from "../../interfaces/expenses";
 
 const StyledFab = styled(Fab)({
   position: "relative",
   zIndex: 1,
 });
 
-export const Income = () => {
+export const Expense = () => {
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [incomes, setIncomes] = useState<IIncome[] | []>([]);
-  const [detailIncome, setDetailIncome] = useState<IIncome>();
+  const [expenses, setExpenses] = useState<IExpense[] | []>([]);
+  const [detailExpense, setDetailExpense] = useState<IExpense>();
   const [selectedMonth, setSelectedMonth] = useState<IMonths | null>(null);
 
-  const getIncomes = () => {
-    const data = incomeServices.getIncomes();
-    setIncomes(data);
+  const getExpenses = () => {
+    const data = expenseServices.getExpenses();
+    setExpenses(data);
   };
 
   const handleOpenCreateModal = () => {
@@ -41,45 +41,45 @@ export const Income = () => {
   };
 
   const handleDelete = (id: number) => {
-    const updatedIncomes = incomeServices.deleteIncome(id);
-    setIncomes(updatedIncomes);
+    const updatedExpenses = expenseServices.deleteExpense(id);
+    setExpenses(updatedExpenses);
   };
 
   const handleOpenEditModal = (id: number) => {
-    const income = incomes.find((income) => income.id === id);
-    setDetailIncome(income);
+    const expense = expenses.find((expense) => expense.id === id);
+    setDetailExpense(expense);
     setOpenEditModal(true);
   };
 
   const handleCloseEditModal = () => {
-    setDetailIncome(undefined);
+    setDetailExpense(undefined);
     setOpenEditModal(false);
   };
 
   const handleFilter = (value: IMonths | null) => {
-    const incomes = incomeServices.getIncomes();
-    const incomesFiltered = incomes.filter((income: IIncome) => {
-      const dateIncome =
-        income.date && parse(income.date, "dd/MM/yyyy", new Date());
-      const month = dateIncome && getMonth(dateIncome);
+    const expenses = expenseServices.getExpenses();
+    const expensesFiltered = expenses.filter((expense: IExpense) => {
+      const dateExpense =
+        expense.date && parse(expense.date, "dd/MM/yyyy", new Date());
+      const month = dateExpense && getMonth(dateExpense);
 
       return month === value?.id ?? 0;
     });
     setSelectedMonth(value);
 
-    setIncomes(value?.name ? incomesFiltered : incomes);
+    setExpenses(value?.name ? expensesFiltered : expenses);
   };
 
   useEffect(() => {
-    getIncomes();
+    getExpenses();
   }, [openEditModal, openCreateModal]);
   return (
-    <IncomeContainer>
+    <ExpenseContainer>
       <AutoCompleteContent>
         <AutoCompleteMonths handleChange={handleFilter} value={selectedMonth} />
       </AutoCompleteContent>
       <IncomeExpensesTable
-        tableData={incomes}
+        tableData={expenses}
         handleDelete={handleDelete}
         handleOpenEditModal={handleOpenEditModal}
       />
@@ -92,15 +92,15 @@ export const Income = () => {
           <AddIcon />
         </StyledFab>
       </AddButtonContent>
-      <CreateIncomeModal
+      <CreateExpenseModal
         open={openCreateModal}
         handleClose={handleCloseCreateModal}
       />
-      <EditIncomeModal
+      <EditExpenseModal
         open={openEditModal}
         handleClose={handleCloseEditModal}
-        incomeData={detailIncome}
+        expenseData={detailExpense}
       />
-    </IncomeContainer>
+    </ExpenseContainer>
   );
 };
