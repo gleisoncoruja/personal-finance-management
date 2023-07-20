@@ -4,13 +4,15 @@ import { ChangeEvent, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { CategorySelect } from "../../../../components/Select/CategorySelect";
-import { incomeServices } from "../../../../services/incomeServices";
-import { toast } from "react-toastify";
+
 import { useEffect } from "react";
 import { CustomModal } from "../../../../components/Modal";
 import { IIncome } from "../../../../interfaces/income";
 import { parse } from "date-fns";
 import { categoryIncomeServices } from "../../../../services/categoryIncomeServices";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import { reset, updateIncome } from "../../../../redux/slices/incomeSlice";
+import { toast } from "react-toastify";
 
 interface IEditIncomeModalProps {
   open: boolean;
@@ -23,11 +25,15 @@ export const EditIncomeModal = ({
   handleClose,
   incomeData,
 }: IEditIncomeModalProps) => {
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [observation, setObservation] = useState<string | null | undefined>("");
   const [repeat, setRepeat] = useState(false);
+  const { error, errorMessage, success } = useAppSelector(
+    (state) => state.income
+  );
 
   const categories = categoryIncomeServices.getCategoryIncomes();
 
@@ -36,7 +42,6 @@ export const EditIncomeModal = ({
 
     setValue(value);
   };
-
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setSelectedCategory(Number(event.target.value));
   };
@@ -54,19 +59,22 @@ export const EditIncomeModal = ({
       date: selectedDate,
       repeat,
     };
-    try {
-      incomeServices.patchIncome({
+    dispatch(
+      updateIncome({
         id: (incomeData && incomeData.id) || 0,
         data: updatedIncome,
-      });
-    } catch (error: Error | unknown) {
-      const errorMessage =
-        error instanceof Error ? error?.message : "Erro ao salvar receita";
-      toast.error(errorMessage);
-      return;
-    }
-    handleClose();
+      })
+    );
   };
+
+  useEffect(() => {
+    error && toast.error(errorMessage || "Erro ao salvar receita");
+    success && handleClose();
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [error, success]);
 
   useEffect(() => {
     if (!open) {

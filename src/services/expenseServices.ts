@@ -1,22 +1,12 @@
 import { ICategory } from "../interfaces/category";
-import { IExpense } from "../interfaces/expenses";
+import {
+  IExpense,
+  IPatchExpenseProps,
+  IPostExpenseProps,
+} from "../interfaces/expenses";
 
 import { mapFields } from "../utils/mapFields";
 import { parse, addMonths, format, getYear } from "date-fns";
-
-interface IPostExpenseProps {
-  [key: string]: string | number | boolean | null | undefined;
-  categoryId: number;
-  value: string;
-  observation?: string | null;
-  date: string | null;
-  repeat: boolean;
-}
-
-interface IPatchExpenseProps {
-  id: number;
-  data: IPostExpenseProps;
-}
 
 function isExpenseInvalid(expense: IPostExpenseProps) {
   const excludeCheck = ["observation", "categoryId", "repeat"];
@@ -157,7 +147,7 @@ const patchExpense = ({ id, data }: IPatchExpenseProps) => {
     }
   }
 
-  return expenses;
+  return getExpenses();
 };
 
 export const expenseServices = {

@@ -9,3 +9,10 @@ export interface IMonthsChart {
   totalIncome: number;
   totalExpense: number;
 }
+
+export interface IMonthsState {
+  months: IMonthsChart[];
+  balanceIncome: number;
+  balanceExpense: number;
+  balance: number;
+}

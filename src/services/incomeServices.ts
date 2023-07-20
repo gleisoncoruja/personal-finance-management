@@ -1,21 +1,11 @@
 import { ICategory } from "../interfaces/category";
-import { IIncome } from "../interfaces/income";
+import {
+  IIncome,
+  IPatchIncomeProps,
+  IPostIncomeProps,
+} from "../interfaces/income";
 import { mapFields } from "../utils/mapFields";
 import { parse, addMonths, format, getYear } from "date-fns";
-
-interface IPostIncomeProps {
-  [key: string]: string | number | boolean | null | undefined;
-  categoryId: number;
-  value: string;
-  observation?: string | null;
-  date: string | null;
-  repeat: boolean;
-}
-
-interface IPatchIncomeProps {
-  id: number;
-  data: IPostIncomeProps;
-}
 
 function isIncomeInvalid(income: IPostIncomeProps) {
   const excludeCheck = ["observation", "categoryId", "repeat"];
@@ -156,7 +146,7 @@ const patchIncome = ({ id, data }: IPatchIncomeProps) => {
     }
   }
 
-  return incomes;
+  return getIncomes();
 };
 
 export const incomeServices = {

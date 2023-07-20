@@ -4,11 +4,12 @@ import { ChangeEvent, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { CategorySelect } from "../../../../components/Select/CategorySelect";
-import { incomeServices } from "../../../../services/incomeServices";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { CustomModal } from "../../../../components/Modal";
 import { categoryIncomeServices } from "../../../../services/categoryIncomeServices";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import { createIncome, reset } from "../../../../redux/slices/incomeSlice";
 
 interface ICreateIncomeProps {
   open: boolean;
@@ -19,11 +20,15 @@ export const CreateIncomeModal = ({
   open,
   handleClose,
 }: ICreateIncomeProps) => {
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string | null>("");
   const [observation, setObservation] = useState<string | null>("");
   const [repeat, setRepeat] = useState(false);
+  const { error, errorMessage, success } = useAppSelector(
+    (state) => state.income
+  );
 
   const categories = categoryIncomeServices.getCategoryIncomes();
 
@@ -50,16 +55,17 @@ export const CreateIncomeModal = ({
       date: selectedDate,
       repeat,
     };
-    try {
-      incomeServices.postIncome(newIncome);
-    } catch (error: Error | unknown) {
-      const errorMessage =
-        error instanceof Error ? error?.message : "Erro ao salvar receita";
-      toast.error(errorMessage);
-      return;
-    }
-    handleClose();
+    dispatch(createIncome(newIncome));
   };
+
+  useEffect(() => {
+    error && toast.error(errorMessage || "Erro ao salvar receita");
+    success && handleClose();
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [error, success]);
 
   useEffect(() => {
     setValue("");

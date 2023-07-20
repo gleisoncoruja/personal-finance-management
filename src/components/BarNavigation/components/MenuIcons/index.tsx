@@ -4,8 +4,10 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import SavingsIcon from "@mui/icons-material/Savings";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import HomeIcon from "@mui/icons-material/Home";
 
 export const menuActions = [
+  { icon: <HomeIcon />, name: "Página inicial", path: "/" },
   { icon: <AttachMoneyIcon />, name: "Receitas", path: "/income" },
   { icon: <MoneyOffIcon />, name: "Despesas", path: "/expense" },
   {

@@ -15,6 +15,12 @@ import { IIncome } from "../../interfaces/income";
 import { EditIncomeModal } from "./components/Modal/EditIncomeModal";
 import { IMonths } from "../../interfaces/months";
 import { getMonth, parse } from "date-fns";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import {
+  deleteIncomes,
+  getIncomes,
+  reset,
+} from "../../redux/slices/incomeSlice";
 
 const StyledFab = styled(Fab)({
   position: "relative",
@@ -22,18 +28,16 @@ const StyledFab = styled(Fab)({
 });
 
 export const Income = () => {
+  const dispatch = useAppDispatch();
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [incomes, setIncomes] = useState<IIncome[] | []>([]);
+  const [incomesData, setIncomesData] = useState<IIncome[] | []>([]);
   const [detailIncome, setDetailIncome] = useState<IIncome>();
   const [selectedMonth, setSelectedMonth] = useState<IMonths | null>(null);
-
-  const getIncomes = () => {
-    const data = incomeServices.getIncomes();
-    setIncomes(data);
-  };
+  const { incomes } = useAppSelector((state) => state.income);
 
   const handleOpenCreateModal = () => {
+    dispatch(reset());
     setOpenCreateModal(true);
   };
   const handleCloseCreateModal = () => {
@@ -41,11 +45,11 @@ export const Income = () => {
   };
 
   const handleDelete = (id: number) => {
-    const updatedIncomes = incomeServices.deleteIncome(id);
-    setIncomes(updatedIncomes);
+    dispatch(deleteIncomes(id));
   };
 
   const handleOpenEditModal = (id: number) => {
+    dispatch(reset());
     const income = incomes.find((income) => income.id === id);
     setDetailIncome(income);
     setOpenEditModal(true);
@@ -67,19 +71,26 @@ export const Income = () => {
     });
     setSelectedMonth(value);
 
-    setIncomes(value?.name ? incomesFiltered : incomes);
+    setIncomesData(value?.name ? incomesFiltered : incomes);
   };
 
   useEffect(() => {
-    getIncomes();
-  }, [openEditModal, openCreateModal]);
+    setIncomesData(incomes);
+  }, [incomes]);
+
+  useEffect(() => {
+    dispatch(getIncomes());
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
   return (
     <IncomeContainer>
       <AutoCompleteContent>
         <AutoCompleteMonths handleChange={handleFilter} value={selectedMonth} />
       </AutoCompleteContent>
       <IncomeExpensesTable
-        tableData={incomes}
+        tableData={incomesData}
         handleDelete={handleDelete}
         handleOpenEditModal={handleOpenEditModal}
       />

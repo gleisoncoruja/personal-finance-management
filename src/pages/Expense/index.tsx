@@ -15,6 +15,12 @@ import { EditExpenseModal } from "./components/Modal/EditExpenseModal";
 import { IMonths } from "../../interfaces/months";
 import { getMonth, parse } from "date-fns";
 import { IExpense } from "../../interfaces/expenses";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import {
+  deleteExpenses,
+  getExpenses,
+  resetExpenseState,
+} from "../../redux/slices/expenseSlice";
 
 const StyledFab = styled(Fab)({
   position: "relative",
@@ -22,18 +28,16 @@ const StyledFab = styled(Fab)({
 });
 
 export const Expense = () => {
+  const dispatch = useAppDispatch();
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [expenses, setExpenses] = useState<IExpense[] | []>([]);
+  const [expensesData, setExpensesData] = useState<IExpense[] | []>([]);
   const [detailExpense, setDetailExpense] = useState<IExpense>();
   const [selectedMonth, setSelectedMonth] = useState<IMonths | null>(null);
-
-  const getExpenses = () => {
-    const data = expenseServices.getExpenses();
-    setExpenses(data);
-  };
+  const { expenses } = useAppSelector((state) => state.expense);
 
   const handleOpenCreateModal = () => {
+    dispatch(resetExpenseState());
     setOpenCreateModal(true);
   };
   const handleCloseCreateModal = () => {
@@ -41,12 +45,12 @@ export const Expense = () => {
   };
 
   const handleDelete = (id: number) => {
-    const updatedExpenses = expenseServices.deleteExpense(id);
-    setExpenses(updatedExpenses);
+    dispatch(deleteExpenses(id));
   };
 
   const handleOpenEditModal = (id: number) => {
     const expense = expenses.find((expense) => expense.id === id);
+    dispatch(resetExpenseState());
     setDetailExpense(expense);
     setOpenEditModal(true);
   };
@@ -67,19 +71,26 @@ export const Expense = () => {
     });
     setSelectedMonth(value);
 
-    setExpenses(value?.name ? expensesFiltered : expenses);
+    setExpensesData(value?.name ? expensesFiltered : expenses);
   };
 
   useEffect(() => {
-    getExpenses();
-  }, [openEditModal, openCreateModal]);
+    setExpensesData(expenses);
+  }, [expenses]);
+
+  useEffect(() => {
+    dispatch(getExpenses());
+    return () => {
+      dispatch(resetExpenseState());
+    };
+  }, []);
   return (
     <ExpenseContainer>
       <AutoCompleteContent>
         <AutoCompleteMonths handleChange={handleFilter} value={selectedMonth} />
       </AutoCompleteContent>
       <IncomeExpensesTable
-        tableData={expenses}
+        tableData={expensesData}
         handleDelete={handleDelete}
         handleOpenEditModal={handleOpenEditModal}
       />

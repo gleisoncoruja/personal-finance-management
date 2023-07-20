@@ -10,6 +10,11 @@ import { useEffect } from "react";
 import { CustomModal } from "../../../../components/Modal";
 import { IExpense } from "../../../../interfaces/expenses";
 import { parse } from "date-fns";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import {
+  resetExpenseState,
+  updateExpense,
+} from "../../../../redux/slices/expenseSlice";
 
 interface IEditExpenseModalProps {
   open: boolean;
@@ -22,11 +27,15 @@ export const EditExpenseModal = ({
   handleClose,
   expenseData,
 }: IEditExpenseModalProps) => {
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [observation, setObservation] = useState<string | null | undefined>("");
   const [repeat, setRepeat] = useState(false);
+  const { error, errorMessage, success } = useAppSelector(
+    (state) => state.expense
+  );
 
   const categories = expenseServices.getCategories();
 
@@ -53,19 +62,21 @@ export const EditExpenseModal = ({
       date: selectedDate,
       repeat,
     };
-    try {
-      expenseServices.patchExpense({
+    dispatch(
+      updateExpense({
         id: (expenseData && expenseData.id) || 0,
         data: updatedExpense,
-      });
-    } catch (error: Error | unknown) {
-      const errorMessage =
-        error instanceof Error ? error?.message : "Erro ao salvar despesa";
-      toast.error(errorMessage);
-      return;
-    }
-    handleClose();
+      })
+    );
   };
+  useEffect(() => {
+    error && toast.error(errorMessage || "Erro ao salvar despesa");
+    success && handleClose();
+
+    return () => {
+      dispatch(resetExpenseState());
+    };
+  }, [error, success]);
 
   useEffect(() => {
     if (!open) {

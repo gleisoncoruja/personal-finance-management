@@ -1,4 +1,8 @@
-import { SpeedDial, styled } from "@mui/material";
+import { Box, Paper, SpeedDial, styled } from "@mui/material";
+
+interface BalanceContentProps {
+  balance: number;
+}
 
 export const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -29,3 +33,28 @@ export const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
+
+export const HeaderContent = styled(Box)({
+  display: "flex",
+  width: "100%",
+});
+
+export const TitleContent = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+});
+
+export const BalanceContent = styled(Paper)<BalanceContentProps>(
+  ({ balance }) => ({
+    display: "flex",
+    minWidth: "fit-content",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "0.5rem",
+    gap: "0.5rem",
+    backgroundColor: balance > 0 ? "#89BD23" : "#d32f2f",
+    color: "#FFF",
+  })
+);
