@@ -5,6 +5,7 @@ import { Income } from "../pages/Income";
 import { Expense } from "../pages/Expense";
 import { CategoryIncome } from "../pages/CategoryIncome";
 import { CategoryExpense } from "../pages/CategoryExpense";
+import { Report } from "../pages/Report";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: "/income/category", element: <CategoryIncome /> },
       { path: "/expense", element: <Expense /> },
       { path: "/expense/category", element: <CategoryExpense /> },
+      { path: "/report", element: <Report /> },
     ],
   },
 ]);

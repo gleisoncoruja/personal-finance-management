@@ -17,6 +17,7 @@ export const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
       color: "#FFF",
     },
     "&:hover": {
+      transition: "background-color 0.3s ease-in-out",
       backgroundColor: "#FFF",
       "& .MuiSvgIcon-root": {
         color: theme.palette.primary.main,

@@ -48,7 +48,6 @@ const expenseSlice = createSlice({
       try {
         const data = action.payload;
         const resp = expenseServices.patchExpense(data);
-        console.log(resp);
         state.error = false;
         state.success = true;
         state.expenses = resp;

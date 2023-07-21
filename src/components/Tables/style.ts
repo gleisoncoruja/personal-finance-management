@@ -1,7 +1,8 @@
-import { styled, TableContainer } from "@mui/material";
+import { Paper, styled } from "@mui/material";
 
-export const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+export const StyledTableContainer = styled(Paper)(({ theme }) => ({
   height: "60vh",
+  padding: "1rem",
   overflow: "auto",
   "&::-webkit-scrollbar": {
     width: "9px",
